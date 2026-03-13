@@ -83,7 +83,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/home/user/llama.cpp
-ExecStart=/home/user/llama.cpp/build/bin/llama-server -m /home/user/llama.cpp/Qwen3.5-0.8B-Q4_K_M.gguf --mmproj /home/user/llama.cpp/mmproj-F16_0_8.gguf -ngl 99 -c 32768 --ho>
+ExecStart=/home/user/llama.cpp/build/bin/llama-server -m /home/user/llama.cpp/Qwen3.5-0.8B-Q4_K_M.gguf --mmproj /home/user/llama.cpp/mmproj-F16_0_8.gguf -ngl 99 -c 32768 --host 0.0.0.0 --port 8080
 Restart=always
 
 [Install]
