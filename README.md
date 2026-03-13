@@ -95,7 +95,14 @@ sudo systemctl enable llama-cpp.service
 sudo systemctl start llama-cpp.service
 ```
 
-## Инфрастуктура 
+## Инфрастуктура
+
+### Во всех sh-файлах и инструкциях проверить текст server-ip -- нужно заменять на свой. Его можно определить через
+```bash
+ip a
+```
+
+### Клонирование репозитория
 
 ```bash
 cd ~
