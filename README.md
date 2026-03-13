@@ -225,7 +225,7 @@ nano /etc/gitlab-runner/config.toml
  "concurrent = 1"
 ```
 
-D секции runners.docker
+В секции runners.docker
 ```sh
     tls_verify = false
     image = "my-runner-tools:latest"  # Укажите ваш будущий образ как дефолтный
