@@ -15,8 +15,10 @@
 Плюсы:
 * В процессе компиляции возможно наиболее полная подстройка под особенности аппаратного обеспечения
 * Возможность запуска моделей с функционалом vision без GUI интерфейса
+
 Минус:
 * Постоянно занимает VRAM под модель + контест
+  
 ### Установка llama.cpp
 ```bash
 cd ~
@@ -32,15 +34,19 @@ cd llama.cpp
 cmake -B build -DGGML_CUDA=ON -DGGML_CUDA_F16=ON -DCMAKE_CUDA_ARCHITECTURES=61 -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
 cmake --build build --config Release -j$(nproc)
 ```
+
 ### Выбор модели
 Анализ по состоянию на март 2026 г. показал, что с русским языком качественно работают модели Qwen3.5. Кроме того, они имеют возможность обработки графиков из ipynb.
+
 Учитывая 
 * особенности аппаратной конфигурации,
 * возможный объем отчета (т.е. нужен запас в VRAM под контекст)
 выбрана модель из [Qwen3.5-0.8B-GGUF](https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF)
+
 Для обработки
 * текста -- Qwen3.5-0.8B-Q4_K_M.gguf;
 * изображений -- mmproj-F16_0_8.gguf.
+
 Модели размещены в том же каталоге ~/llama.cpp
 
 ### Проверка запуска сервера модели:
@@ -55,6 +61,7 @@ cmake --build build --config Release -j$(nproc)
 * -c 32768 -- размер контекста
 * --host 0.0.0.0 -- запуск сервере для всей локальной сети
 * --port 8080 -- порт для доступа
+
 После запуска:
 ```bash
 watch nvidia-smi
@@ -90,57 +97,88 @@ sudo systemctl start llama-cpp.service
 
 ## Инфрастуктура 
 
-Создаем каталоги
 ```bash
-mkdir -p ~/gitlab
+cd ~
+git clone https://github.com/danil1online/gitlab_ce_ai_study.git gitlab
 cd ~/gitlab
 ```
 
-1.2. Докер-файл 
-$ nano docker-compose.yml
-* см. соответствующий файл
+### [Докер-файл](docker-compose.yml) 
+Проверяем содержание
+```bash
+nano docker-compose.yml
+```
+
 Порт SSH внутри GitLab выставлен на 2222, чтобы не конфликтовать с системным SSH.
-Настроен сразу внешний ip (на vds/vps поднят vpn) на основной порт 80, порт 2222, порт для llama-server 8080 (порты проброшены от vds/vps) -- или начинаются мелкие проблемы, например, с тем, что клонировать предлагает с внутреннего адреса ПК. 
-Внутри ./gitlab также будут созданы каталоги
-./config
-./logs
-./data
-./runner-config
 
-$ docker compose up -d
+Настроен внешний ip (на vds/vps поднят vpn) на основной порт 80. Порты 80, 2222, порт для llama-server 8080 в тестовой конфигурации проброшены от vds/vps (или начинаются мелкие проблемы, например, с тем, что клонировать из меню репозитория сервис предлагает с внутреннего адреса ПК) 
 
-2. Доступ и начальная настройка. Создание студентов с нужными логинами
+ -> Ctrl+X 
 
-2.1. Найти пароль root: 
-$ docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
+Внутри ./gitlab создаем каталоги
+```bash
+mkdir ./config
+mkdir ./logs
+mkdir ./data
+mkdir ./runner-config
+```
 
-2.2. Открыть в браузере: http://193.124.118.93 (vds/vps)
-Зайти как root + найденный пароль, сразу задай новый пароль.
+Запуск:
+```bash
+docker compose up -d
+```
 
-2.3. Создать personal access token для root
-Зайди под root → Preferences → Personal Access Tokens (или User Settings → Access Tokens). 
-http://193.124.118.93/-/user_settings/personal_access_tokens?page=1&state=active&sort=expires_asc
-Создай токен с правами api (название любое), сохрани значение, например GL_TOKEN.
+## Доступ и начальная настройка
 
-2.4. Создание учетных записей, добавление их в группу.
+### Найти пароль root:
+```bash
+docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
+```
+
+### Открыть в браузере: http://<Server-IP>. Зайти как root + найденный пароль, сразу задать новый пароль.
+
+### Создать personal access token для root
+
+Зайти под root → Preferences → Personal Access Tokens (или User Settings → Access Tokens).
+
+http://<Server-IP>/-/user_settings/personal_access_tokens?page=1&state=active&sort=expires_asc
+
+Создать токен с правами api (название любое), сохранить значение, например GL_TOKEN.
+
+## Создание студентов с нужными логинами
+
+Создание учетных записей, добавление их в группу.
+
 Формат логина: student_{группа}_{порядковый номер} Примеры: student_pia_01, student_ista_12, student_istb_30, student_ita_07.
+
 Самый удобный путь — через GitLab API и скрипт.
-На хосте создай файл create_students.sh
-* см. соответствующий файл
-$ chmod +x create_students.sh
-$ ./create_students.sh
 
-2.5. Регистрация GitLab Runner
+Реализован в [create_students.sh](create_students.sh)
+```bash
+chmod +x create_students.sh
+./create_students.sh
+```
 
-2.5.1. Подготовка GitLab -- получение токена
+## Регистрация GitLab Runner
+
+### Подготовка GitLab -- получение токена
+
 Перейти в Admin Area (иконка гаечного ключа вверху справа или в меню слева).
+
 Выбрать CI/CD -> Runners.
+
 Нажмите кнопку New instance runner (в новых версиях). 
-Заполните все поля и запомните tag (у меня docker_runner).
+
+Заполните все поля и запомните tag (например, docker_runner).
+
 Скопируйте сформированный токен ("glpat-"). 
 
-2.5.2. Подготовка runnera 
-$ docker exec -it gitlab-runner gitlab-runner register
+### Подготовка runnera 
+```bash
+docker exec -it gitlab-runner gitlab-runner register
+```
+Пример вводных данных:
+```bash
 Runtime platform                                    arch=amd64 os=linux pid=17 revision=07e534ba version=18.9.0
 Running in system-mode.                                                                            
 Enter the GitLab instance URL (for example, https://gitlab.com/):
@@ -156,22 +194,30 @@ Enter the default Docker image (for example, ruby:3.3):
 "curlimages/curl:latest"
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
+```
 
-2.5.3. Сделать свой образ
-$ nano Dockerfile.runner
-FROM alpine:latest
-RUN apk add --no-cache curl sed grep findutils
-Ctrl+O - Ctrl+X
-$ docker build -t my-runner-tools:latest -f Dockerfile.runner .
+### Свой [образ для runner'а](Dockerfile.runner)
+Сразу собирает подходящий набор инструментов для парсинга и обработки *.ipynb:
 
-2.5.4. Проверить и изменить
-$ docker exec -it gitlab-runner bash
-# apt update
-# apt install nano
-# nano /etc/gitlab-runner/config.toml
-вверху "concurrent = 1"
-в секции 
-[runners.docker]
+```bash
+docker build -t my-runner-tools:latest -f Dockerfile.runner .
+```
+
+### Проверить и изменить
+
+```bash
+docker exec -it gitlab-runner bash
+apt update
+apt install nano
+ano /etc/gitlab-runner/config.toml
+```
+Вверху
+```sh
+ "concurrent = 1"
+```
+
+D секции runners.docker
+```sh
     tls_verify = false
     image = "my-runner-tools:latest"  # Укажите ваш будущий образ как дефолтный
     pull_policy = ["if-not-present"] # ГЛАВНОЕ: сначала искать образ локально
@@ -181,23 +227,49 @@ $ docker exec -it gitlab-runner bash
     disable_cache = false
     volumes = ["/cache"]
     # ... остальное без изменений
-Ctrl+O - Ctrl+X
-# exit
-$ docker restart gitlab-runner
+```
+  -> Ctrl+O - Ctrl+X
+
+```bash
+exit
+docker restart gitlab-runner
+```
+
+# Дополнительно
+
+## [cleanup_repos.sh](cleanup_repos.sh) 
+Удобный и безопасный скрипт, который:
+- удаляет все репозитории всех студентов
+- удаляет репозитории студентов выбранной группы
+- удаляет репозитории одного конкретного студента
+Для использования
+```bash
+sudo apt install jq
+chmod +x cleanup_repos.sh
+./cleanup_repos.sh
+```
+
+## Удалить пользователей, кроме основных, но включая препода
+```bash
+sudo apt install jq
+chmod +x delete_all_users.sh
+./delete_all_users.sh
+```
 
 
-3. Инструкция для студентов:
-3.1. Войти, например, student_ista_01 / ChangeMe123!
-3.2. Создать проект:
-3.2.1. Справа вверху нажать на иконку "+" - "New project/repository" - "Create from template" - "GitLab CI/CD components" (внизу) - "Use template"
-3.2.2. Заполнить "Project name" - "ist_lab{x}", где {x} - номер работы.
-3.2.3. В "Project URL" - "Pick a group or namespace" выбрать "Users" : имя пользователя (в данном примере student_ista_01).
-3.2.4. В "Project description (optional)" - "ist_lab{x}", где {x} - номер работы.
-3.2.5. В "Visibility Level" - "Public"
-3.2.6. "Create project"
-3.2.7. Нажать на файле ".gitlab-ci.yml", в новом окне нажать кнопку "Edit" - "Edit single file"
-3.2.8. Заменить текст в открывшемся окне на содержимое из http://193.124.118.93/students/ci-templates/-/blob/main/.gitlab-ci.yml
-##########################################################################################################################################################
+# Инструкция для студентов:
+## Войти в http://<Server-IP>, например, с учетными данными student_ista_01 / ChangeMe123!
+## Создать проект:
+1. Справа вверху нажать на иконку "+" - "New project/repository" - "Create from template" - "GitLab CI/CD components" (внизу) - "Use template"
+2. Заполнить "Project name" - "ist_lab{x}", где {x} - номер работы.
+3. В "Project URL" - "Pick a group or namespace" выбрать "Users" : имя пользователя (в данном примере student_ista_01).
+4. В "Project description (optional)" - "ist_lab{x}", где {x} - номер работы.
+5. В "Visibility Level" - "Public"
+6. "Create project"
+## Изменить алгоритм проверки CI/CD
+1. Нажать на файле ".gitlab-ci.yml", в новом окне нажать кнопку "Edit" - "Edit single file"
+2. Заменить текст в открывшемся окне на содержимое из [.gitlab-ci.yml](http://193.124.118.93/students/ci-templates/-/blob/main/.gitlab-ci.yml)
+```sh
 stages:
   - ai
 
@@ -259,29 +331,15 @@ ai_review:
       - ai_report.json
     when: on_success
     expire_in: 1 week
-##########################################################################################################################################################
-3.2.9. "Commit changes" - "Commit changes"
-3.2.10. Напротив надписи "Edit .gitlab-ci.yml" появится сначала значек синего кружка с незаполненным сектором. Значит задача проверки выполняется. Дожидаемся окончания ("Passed" или аналогичное). 
-3.2.11. Загружаем в проект файл для проверки - в корень проекта, например, для преподавателя {prepod} и первой работы {1} http://193.124.118.93/prepod/ist_lab1/
+```
+2. "Commit changes" - "Commit changes"
+3. Напротив надписи "Edit .gitlab-ci.yml" появится сначала значек синего кружка с незаполненным сектором. Значит задача проверки выполняется. Дожидаемся окончания ("Passed" или аналогичное). 
+## Использование автопроверки. 
+1. Загружаем в проект файл для проверки - в корень проекта, например, для преподавателя {prepod} и первой работы {1} http://<Server-IP>/prepod/ist_lab1/
 Нажимаем "+" - "Upload file" - "upload" - выбрать файл *.ipynb - "Commit changes". Автоматически запустится повторная проверка. 
-3.2.11. Переходим по адресу, соответствующему учетной записи, например, для преподавателя {prepod} и первой работы {1}
-http://193.124.118.93/prepod/ist_lab1/-/jobs
+2. Переходим по адресу, соответствующему учетной записи, например, для преподавателя {prepod} и первой работы {1}
+http://<Server-IP>/prepod/ist_lab1/-/jobs
 Если проверка прошла штатно, в открывшемся то справа в первом из списка пункте будет кнопка "Download artifacts". Ее нужать -- скачается архив, в нем -- "ai_report.json". 
-3.2.12. Открываем ai_report.json текстовым редактором или перетаскиваем в браузер, например, Google Chrome и в откывшемся окне вверху слева ставим галочку "Автоформатировать". Проверяем "content" - должно соответствовать проверяемому файлу. Корректируем форматирование, вносим в отчет по практической работе.   
+3. Открываем ai_report.json текстовым редактором или перетаскиваем в браузер, например, Google Chrome и в откывшемся окне вверху слева ставим галочку "Автоформатировать". Проверяем "content" - должно соответствовать проверяемому файлу. Корректируем форматирование, вносим в отчет по практической работе.   
 
-3. Дополнительно
 
-3.1 cleanup_repos.sh -- удобный и безопасный скрипт, который:
-- удаляет все репозитории всех студентов
-- удаляет репозитории студентов выбранной группы
-- удаляет репозитории одного конкретного студента
-sudo apt install jq
-nano cleanup_repos.sh
-* см. соответствующий файл
-chmod +x cleanup_repos.sh
-
-2.4. Удалить пользователей, кроме основных, но включая препода
-sudo apt install jq
-nano delete_all_users.sh
-* см. соответствующий файл
-chmod +x delete_all_users.sh
