@@ -351,4 +351,6 @@ http://Server-IP/prepod/ist_lab1/-/jobs
 Если проверка прошла штатно, в открывшемся то справа в первом из списка пункте будет кнопка "Download artifacts". Ее нужать -- скачается архив, в нем -- "ai_report.json". 
 3. Открываем ai_report.json текстовым редактором или перетаскиваем в браузер, например, Google Chrome и в откывшемся окне вверху слева ставим галочку "Автоформатировать". Проверяем "content" - должно соответствовать проверяемому файлу. Корректируем форматирование, вносим в отчет по практической работе.   
 
+# License
 
+This project is licensed under the [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license. See the [LICENSE](./LICENSE) file for details.
