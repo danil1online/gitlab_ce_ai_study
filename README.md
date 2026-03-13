@@ -135,13 +135,15 @@ docker compose up -d
 docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 ```
 
-### Открыть в браузере: http://<Server-IP>. Зайти как root + найденный пароль, сразу задать новый пароль.
+### Открыть в браузере: http://Server-IP
+
+Зайти как root + найденный пароль, сразу задать новый пароль.
 
 ### Создать personal access token для root
 
 Зайти под root → Preferences → Personal Access Tokens (или User Settings → Access Tokens).
 
-http://<Server-IP>/-/user_settings/personal_access_tokens?page=1&state=active&sort=expires_asc
+http://Server-IP/-/user_settings/personal_access_tokens?page=1&state=active&sort=expires_asc
 
 Создать токен с правами api (название любое), сохранить значение, например GL_TOKEN.
 
@@ -258,7 +260,7 @@ chmod +x delete_all_users.sh
 
 
 # Инструкция для студентов:
-## Войти в http://<Server-IP>, например, с учетными данными student_ista_01 / ChangeMe123!
+## Войти в http://Server-IP, например, с учетными данными student_ista_01 / ChangeMe123!
 ## Создать проект:
 1. Справа вверху нажать на иконку "+" - "New project/repository" - "Create from template" - "GitLab CI/CD components" (внизу) - "Use template"
 2. Заполнить "Project name" - "ist_lab{x}", где {x} - номер работы.
@@ -315,7 +317,7 @@ ai_review:
 
     # Отправка на AI сервер
     - |
-      curl -s -X POST "http://193.124.118.93:8080/v1/chat/completions" \
+      curl -s -X POST "http://Server-IP:8080/v1/chat/completions" \
         -H "Content-Type: application/json" \
         -d @payload.json \
         --max-time 180 \
@@ -338,7 +340,7 @@ ai_review:
 1. Загружаем в проект файл для проверки - в корень проекта, например, для преподавателя {prepod} и первой работы {1} http://<Server-IP>/prepod/ist_lab1/
 Нажимаем "+" - "Upload file" - "upload" - выбрать файл *.ipynb - "Commit changes". Автоматически запустится повторная проверка. 
 2. Переходим по адресу, соответствующему учетной записи, например, для преподавателя {prepod} и первой работы {1}
-http://<Server-IP>/prepod/ist_lab1/-/jobs
+http://Server-IP/prepod/ist_lab1/-/jobs
 Если проверка прошла штатно, в открывшемся то справа в первом из списка пункте будет кнопка "Download artifacts". Ее нужать -- скачается архив, в нем -- "ai_report.json". 
 3. Открываем ai_report.json текстовым редактором или перетаскиваем в браузер, например, Google Chrome и в откывшемся окне вверху слева ставим галочку "Автоформатировать". Проверяем "content" - должно соответствовать проверяемому файлу. Корректируем форматирование, вносим в отчет по практической работе.   
 
