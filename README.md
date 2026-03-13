@@ -218,7 +218,7 @@ docker build -t my-runner-tools:latest -f Dockerfile.runner .
 docker exec -it gitlab-runner bash
 apt update
 apt install nano
-ano /etc/gitlab-runner/config.toml
+nano /etc/gitlab-runner/config.toml
 ```
 Вверху
 ```sh
