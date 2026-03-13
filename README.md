@@ -121,7 +121,9 @@ nano docker-compose.yml
 
 Настроен внешний ip (на vds/vps поднят vpn) на основной порт 80. Порты 80, 2222, порт для llama-server 8080 в тестовой конфигурации проброшены от vds/vps (или начинаются мелкие проблемы, например, с тем, что клонировать из меню репозитория сервис предлагает с внутреннего адреса ПК) 
 
- -> Ctrl+X 
+ -> `Ctrl+X`
+
+### Использованая версия gitlab-ce: 18.9
 
 Внутри ./gitlab создаем каталоги
 ```bash
@@ -221,12 +223,12 @@ apt update
 apt install nano
 nano /etc/gitlab-runner/config.toml
 ```
-Вверху
+* вверху
 ```sh
  "concurrent = 1"
 ```
 
-В секции runners.docker
+* в секции runners.docker
 ```sh
     tls_verify = false
     image = "my-runner-tools:latest"  # Укажите ваш будущий образ как дефолтный
@@ -238,7 +240,7 @@ nano /etc/gitlab-runner/config.toml
     volumes = ["/cache"]
     # ... остальное без изменений
 ```
-  -> Ctrl+O - Ctrl+X
+  -> `Ctrl+O` -> `Ctrl+X`
 
 ```bash
 exit
