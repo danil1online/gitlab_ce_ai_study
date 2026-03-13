@@ -46,7 +46,7 @@ cmake --build build --config Release -j$(nproc)
 
 Для обработки
 * текста -- Qwen3.5-0.8B-Q4_K_M.gguf;
-* изображений -- mmproj-F16_0_8.gguf.
+* изображений -- mmproj-F16.gguf (сохранена, как mmproj-F16_0_8.gguf)
 
 Модели размещены в том же каталоге ~/llama.cpp
 
