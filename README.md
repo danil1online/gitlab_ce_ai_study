@@ -184,7 +184,7 @@ docker exec -it gitlab-runner gitlab-runner register
 Runtime platform                                    arch=amd64 os=linux pid=17 revision=07e534ba version=18.9.0
 Running in system-mode.                                                                            
 Enter the GitLab instance URL (for example, https://gitlab.com/):
-"http://193.124.118.93"
+"http://Server-IP"
 Enter the registration token:
 "glrt-...................."
 Verifying runner... is valid                        correlation_id=01KKCHZSJF4KRVPQVC8A8464QM runner=Lhu0hm2sC runner_name=12f58acb964c
