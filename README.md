@@ -41,6 +41,7 @@ cmake --build build --config Release -j$(nproc)
 Учитывая 
 * особенности аппаратной конфигурации,
 * возможный объем отчета (т.е. нужен запас в VRAM под контекст)
+
 выбрана модель из [Qwen3.5-0.8B-GGUF](https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF)
 
 Для обработки
