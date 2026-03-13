@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-GITLAB_URL="http://193.124.118.93"
-TOKEN="glpat-TOJ9flfvPgLrz_JrvliaOG86MQp1OjEH.01.0w1j9q580" ###########################################TOKEN="glpat-XXXXXXXXXXXX"
+GITLAB_URL="http://server-ip" # Заменить на свой
+TOKEN="glpat-...." ###########################################TOKEN="glpat-XXXXXXXXXXXX"
 
 confirm() {
   read -p "Вы уверены? (yes/no): " ans
