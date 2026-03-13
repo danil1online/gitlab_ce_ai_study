@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-GITLAB_URL="http://193.124.118.93"
-TOKEN="glpat-TOJ9flfvPgLrz_JrvliaOG86MQp1OjEH.01.0w1j9q580"
+GITLAB_URL="http://server-ip" # заменить на свой
+TOKEN="glpat-..." # заменить на свой
 
 # Получение всех пользователей с пагинацией
 get_all_users() {
