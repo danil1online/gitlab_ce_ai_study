@@ -277,7 +277,7 @@ chmod +x delete_all_users.sh
 6. "Create project"
 ## Изменить алгоритм проверки CI/CD
 1. Нажать на файле ".gitlab-ci.yml", в новом окне нажать кнопку "Edit" - "Edit single file"
-2. Заменить текст в открывшемся окне на содержимое из [.gitlab-ci.yml](http://193.124.118.93/students/ci-templates/-/blob/main/.gitlab-ci.yml)
+2. Заменить текст в открывшемся окне на
 ```sh
 stages:
   - ai
