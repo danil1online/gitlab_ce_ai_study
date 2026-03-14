@@ -254,7 +254,7 @@ exit
 docker restart gitlab-runner
 ```
 
-# Дополнительно
+## Дополнительно
 
 ## [cleanup_repos.sh](cleanup_repos.sh) 
 Удобный и безопасный скрипт, который:
@@ -276,7 +276,7 @@ chmod +x delete_all_users.sh
 ```
 
 
-# Инструкция для студентов:
+## Инструкция для студентов:
 ## Войти в http://Server-IP, например, с учетными данными student_ista_01 / ChangeMe123!
 ## Создать проект:
 1. Справа вверху нажать на иконку "+" - "New project/repository" - "Create from template" - "GitLab CI/CD components" (внизу) - "Use template"
@@ -361,6 +361,6 @@ http://Server-IP/prepod/ist_lab1/-/jobs
 Если проверка прошла штатно, в открывшемся то справа в первом из списка пункте будет кнопка "Download artifacts". Ее нужать -- скачается архив, в нем -- "ai_report.json". 
 3. Открываем ai_report.json текстовым редактором или перетаскиваем в браузер, например, Google Chrome и в откывшемся окне вверху слева ставим галочку "Автоформатировать". Проверяем "content" - должно соответствовать проверяемому файлу. Корректируем форматирование, вносим в отчет по практической работе.   
 
-# License
+### License
 
 This project is licensed under the [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license. See the [LICENSE](./LICENSE) file for details.
