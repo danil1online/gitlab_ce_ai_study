@@ -1,4 +1,4 @@
-# Назначение
+## Назначение
 Учебный gitlab сервер на 120 студентов -- "поток" из 4 групп с числом студентов -- до 30 в каждой. 
 ## Особенности:
 * В свои репозитории студенты загружают отчеты о выполненных практических работах в виде *.ipynb. Сервис должен их проверять с использованием LLM, выдавать заключение.
@@ -9,7 +9,7 @@
   * GTX 1060 3Gb / Driver Version: 570.211.01
 * Предполагаются шифры групп: pia, ista, istb, pa, наименование учетных записей: student_{группа}_{порядковый номер}
 
-# Порядок настройки
+## Порядок настройки
 ## LLM Server
 Используем проект llama.cpp. 
 Плюсы:
@@ -31,7 +31,11 @@ sudo apt-get -y install cuda-toolkit-11-8 # Стабильнее всего ра
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
 # Включаем возможность использования видеокарты Nvidia Pascal
-cmake -B build -DGGML_CUDA=ON -DGGML_CUDA_F16=ON -DCMAKE_CUDA_ARCHITECTURES=61 -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+cmake -B build\
+ -DGGML_CUDA=ON\
+ -DGGML_CUDA_F16=ON\
+ -DCMAKE_CUDA_ARCHITECTURES=61\
+ -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
 cmake --build build --config Release -j$(nproc)
 ```
 
@@ -52,7 +56,10 @@ cmake --build build --config Release -j$(nproc)
 
 ### Проверка запуска сервера модели:
 ```bash
-/home/user/llama.cpp/build/bin/llama-server -m /home/user/llama.cpp/Qwen3.5-0.8B-Q4_K_M.gguf --mmproj /home/user/llama.cpp/mmproj-F16_0_8.gguf -ngl 99 -c 32768 --host 0.0.0.0 --port 8080
+/home/user/llama.cpp/build/bin/llama-server\
+ -m /home/user/llama.cpp/Qwen3.5-0.8B-Q4_K_M.gguf\
+ --mmproj /home/user/llama.cpp/mmproj-F16_0_8.gguf\
+ -ngl 99 -c 32768 --host 0.0.0.0 --port 8080
 ```
 здесь:
 * /home/user/llama.cpp/build/bin/llama-server -- путь к основному исполняемому файлу
