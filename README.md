@@ -175,7 +175,7 @@ http://Server-IP/-/user_settings/personal_access_tokens?page=1&state=active&sort
 
 Самый удобный путь — через GitLab API и скрипт.
 
-Реализован в [create_students.sh](create_students.sh)
+Реализован в [create_students.sh](create_students.sh). Перед запуском в нем нужно указать Personal Access Tokens 
 ```bash
 chmod +x create_students.sh
 ./create_students.sh
