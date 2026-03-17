@@ -232,11 +232,24 @@ nano /etc/gitlab-runner/config.toml
  "concurrent = 1"
 ```
 
+* в секции runners - `request_concurrency = 2`
+```sh
+[runners]
+  name = "docker-runner"
+  url = "http://server-ip"
+  id = 1
+  token = "glrt-...."
+  token_obtained_at = 2026-03-17T21:51:07Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "docker"
+  request_concurrency = 2
+```
+
 * в секции runners.docker
 ```sh
     tls_verify = false
-    image = "my-runner-tools:latest"  # Укажите ваш будущий образ как дефолтный
-    pull_policy = ["if-not-present"] # ГЛАВНОЕ: сначала искать образ локально
+    image = "my-runner-tools:latest"
+    pull_policy = ["if-not-present"]
     extra_hosts = ["host.docker.internal:host-gateway"]
     privileged = false
     disable_entrypoint_overwrite = false
