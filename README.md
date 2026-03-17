@@ -334,7 +334,7 @@ ai_review:
 
     # Отправка на AI сервер
     - |
-      curl -s -X POST "http://Server-IP:8080/v1/chat/completions" \
+      curl -s -X POST "http://host.docker.internal:8080/v1/chat/completions" \
         -H "Content-Type: application/json" \
         -d @payload.json \
         --max-time 180 \
