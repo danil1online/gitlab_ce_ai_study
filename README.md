@@ -240,6 +240,7 @@ nano /etc/gitlab-runner/config.toml
     tls_verify = false
     image = "my-runner-tools:latest"  # Укажите ваш будущий образ как дефолтный
     pull_policy = ["if-not-present"] # ГЛАВНОЕ: сначала искать образ локально
+    extra_hosts = ["host.docker.internal:host-gateway"]
     privileged = false
     disable_entrypoint_overwrite = false
     oom_kill_disable = false
