@@ -136,15 +136,14 @@ nano docker-compose.yml
 
 ### Использованая версия gitlab-ce: 18.9
 
-Внутри ./gitlab создаем каталоги
+### Свой [образ для runner'а](Dockerfile.runner)
+Сразу собирает подходящий набор инструментов для парсинга и обработки *.ipynb:
+
 ```bash
-mkdir ./config
-mkdir ./logs
-mkdir ./data
-mkdir ./runner-config
+docker build -t my-runner-tools:latest -f Dockerfile.runner .
 ```
 
-Запуск:
+Запуск основного образа:
 ```bash
 docker compose up -d
 ```
@@ -214,16 +213,9 @@ Enter a name for the runner. This is stored only in the local config.toml file:
 Enter an executor: virtualbox, docker, docker-windows, shell, parallels, docker+machine, kubernetes, docker-autoscaler, instance, custom, ssh:
 "docker"
 Enter the default Docker image (for example, ruby:3.3):
-"curlimages/curl:latest"
+"my-runner-tools:latest"
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
-```
-
-### Свой [образ для runner'а](Dockerfile.runner)
-Сразу собирает подходящий набор инструментов для парсинга и обработки *.ipynb:
-
-```bash
-docker build -t my-runner-tools:latest -f Dockerfile.runner .
 ```
 
 ### Проверить и/или изменить
