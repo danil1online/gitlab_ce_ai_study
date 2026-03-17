@@ -1,5 +1,6 @@
 ## Назначение
-Учебный gitlab сервер на 120 студентов -- "поток" из 4 групп с числом студентов -- до 30 в каждой. 
+Учебный gitlab сервер на 120 студентов -- "поток" из 4 групп с числом студентов -- до 30 в каждой.
+
 ## Особенности:
 * В свои репозитории студенты загружают отчеты о выполненных практических работах в виде *.ipynb. Сервис должен их проверять с использованием LLM, выдавать заключение.
 * Требования к аппаратному обеспечению -- пониженные. Тестирование выполнялось на ПК с
@@ -10,6 +11,7 @@
 * Предполагаются шифры групп: pia, ista, istb, pa, наименование учетных записей: student_{группа}_{порядковый номер}
 
 ## Порядок настройки
+
 ## LLM Server
 Используем проект llama.cpp. 
 Плюсы:
@@ -70,7 +72,7 @@ cmake --build build --config Release -j$(nproc)
 * --host 0.0.0.0 -- запуск сервере для всей локальной сети
 * --port 8080 -- порт для доступа
 
-После запуска:
+После запуска команда:
 ```bash
 watch nvidia-smi
 ```
@@ -96,6 +98,7 @@ Restart=always
 [Install]
 WantedBy=default.target
 ```
+
 Выставляем автозапуск и запускаем. 
 ```bash
 sudo systemctl daemon-reload
@@ -109,6 +112,7 @@ sudo systemctl start llama-cpp.service
 ```bash
 ip a
 ```
+Если есть выход (iptables / proxy) на vps/vds, то server-ip -- это адрес vps/vds. 
 
 ### Клонирование репозитория
 
@@ -182,21 +186,21 @@ chmod +x create_students.sh
 
 ### Подготовка GitLab -- получение токена
 
-Перейти в Admin Area (иконка гаечного ключа вверху справа или в меню слева).
+Перейти в "Admin Area" (иконка гаечного ключа вверху справа или в меню слева).
 
-Выбрать CI/CD -> Runners.
+Выбрать "CI/CD" -> "Runners".
 
-Нажмите кнопку New instance runner (в новых версиях). 
+Нажмите кнопку "New instance runner". 
 
 Заполните все поля и запомните tag (например, docker_runner).
 
-Скопируйте сформированный токен ("glpat-"). 
+Скопируйте сформированный токен ("glpat-..."). 
 
-### Подготовка runnera 
+### Регистрация runnera 
 ```bash
 docker exec -it gitlab-runner gitlab-runner register
 ```
-Пример вводных данных:
+Пример вводных данных (замените Server-IP) и успешной регистрации:
 ```bash
 Runtime platform                                    arch=amd64 os=linux pid=17 revision=07e534ba version=18.9.0
 Running in system-mode.                                                                            
@@ -222,7 +226,7 @@ Configuration (with the authentication token) was saved in "/etc/gitlab-runner/c
 docker build -t my-runner-tools:latest -f Dockerfile.runner .
 ```
 
-### Проверить и изменить
+### Проверить и/или изменить
 
 ```bash
 docker exec -it gitlab-runner bash
@@ -257,7 +261,7 @@ docker restart gitlab-runner
 
 ## Дополнительно
 
-## [cleanup_repos.sh](cleanup_repos.sh) 
+## Скрипт [cleanup_repos.sh](cleanup_repos.sh) 
 Удобный и безопасный скрипт, который:
 - удаляет все репозитории всех студентов
 - удаляет репозитории студентов выбранной группы
