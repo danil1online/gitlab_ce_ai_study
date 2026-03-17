@@ -177,6 +177,7 @@ http://Server-IP/-/user_settings/personal_access_tokens?page=1&state=active&sort
 
 Реализован в [create_students.sh](create_students.sh). Перед запуском в нем нужно указать Personal Access Tokens 
 ```bash
+sudo apt install jq
 chmod +x create_students.sh
 ./create_students.sh
 ```
